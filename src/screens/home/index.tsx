@@ -19,6 +19,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [debouncedKeyword, setDebouncedKeyword] = useState('');
     const [searchTriggered, setSearchTriggered] = useState(false);
+    const [isRefresh, setIsRefresh] = useState(false);
 
     const { data: categories, isLoading: loadingCategories } = useGetCategoriesQuery();
 
@@ -33,7 +34,8 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         data: dataProducts,
         isLoading: loadingProducts,
         isFetching,
-        isError
+        isError,
+        refetch
     } = useGetListProductsByCategoryQuery(queryParams, {
         skip: searchTriggered
     });
@@ -103,8 +105,6 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         );
     }, [dataProducts, searchTriggered]);
 
-
-
     useEffect(() => {
         if (!searchTriggered) return;
 
@@ -142,7 +142,17 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
         }
     };
 
-
+    const handleRefresh = async () => {
+        try {
+            setIsRefresh(true);
+            setPage(1);
+            await refetch();
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setIsRefresh(false);
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -187,7 +197,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
                 contentContainerStyle={styles.wrapperList}
                 renderItem={({ item, index }) => {
                     return (
-                        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Detail', {productId: item.id ?? 0})}>
+                        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Detail', { productId: item.id ?? 0 })}>
                             <Image source={{ uri: item.thumbnail }} style={styles.image} />
                             <View style={styles.cardBody}>
                                 <Text style={styles.textTitle}>{item?.title}</Text>
@@ -200,6 +210,8 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
                 onEndReached={loadMore}
                 onEndReachedThreshold={0.1}
                 removeClippedSubviews={false}
+                refreshing={isRefresh}
+                onRefresh={handleRefresh}
                 ListEmptyComponent={() => {
                     if (!loadingProducts && searchTriggered) {
                         return (
@@ -211,7 +223,7 @@ const Home: React.FC<HomeProps> = ({ navigation }) => {
                     } else return null
                 }}
                 ListFooterComponentStyle={{ paddingVertical: 50 }}
-                ListFooterComponent={!isMore && isFetching ? (
+                ListFooterComponent={!isMore && isFetching && !isError ? (
                     <ActivityIndicator size={'large'} color={themeColor.primary} />
                 ) : null}
             />

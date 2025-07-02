@@ -33,14 +33,17 @@ const Detail: React.FC<DetailProps> = ({ navigation, route }) => {
             setTimeout(() => {
                 dispatch(addToCart(detailProduct));
                 setLoading(false);
-            }, 300);
+            }, 200);
         }
     }
 
     if (isLoading || loading) {
         return (
             <SafeAreaView style={[styles.container, { justifyContent: 'center', alignItems: 'center', }]}>
-                <ActivityIndicator color={themeColor.primary} size={'large'} />
+                <View style={styles.loading}>
+                    <ActivityIndicator color={themeColor.primary} size={'large'} />
+                    <Text style={[styles.textTitle, { marginLeft: 10 }]}>Loading...</Text>
+                </View>
             </SafeAreaView>
         )
     }

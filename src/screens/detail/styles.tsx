@@ -71,6 +71,11 @@ const styles = StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: themeColor.border,
     },
+    loading: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'row'
+    }
 })
 
 export default styles;

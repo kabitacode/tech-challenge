@@ -124,6 +124,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         paddingTop: width * 0.02,
         paddingBottom: width * 0.2,
+        backgroundColor: themeColor.default
     },
     modalHeader: {
         flexDirection: 'row',

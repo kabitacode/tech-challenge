@@ -100,6 +100,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     input: {
+        flex: 1,
         marginLeft: 10
     },
     empty: {

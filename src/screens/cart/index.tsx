@@ -108,7 +108,7 @@ const Cart: React.FC<CartProps> = ({ navigation, route }) => {
                 />
 
                 <View style={styles.footer}>
-                    <Text style={styles.textTotal}>{currencyFormat(totalPrice)}</Text>
+                    <Text style={styles.textTotal}>Total: {currencyFormat(totalPrice)}</Text>
                     <CustomButton title="Checkout" onPress={() => sheetRef.current?.open()} />
                 </View>
             </SafeAreaView>
@@ -127,7 +127,7 @@ const Cart: React.FC<CartProps> = ({ navigation, route }) => {
                         <View style={styles.modal}>
                             <Image source={{ uri: item.thumbnail }} style={styles.imageModal} />
                             <View style={styles.modalWrapper}>
-                                <Text style={styles.textTitle}>{item.title}</Text>
+                                <Text style={[styles.textTitle, {marginBottom: 10}]}>{item.title}</Text>
                                 <Text style={styles.textPrice}>{currencyFormat((item.price ?? 0) * item.quantity)}</Text>
                             </View>
                         </View>
